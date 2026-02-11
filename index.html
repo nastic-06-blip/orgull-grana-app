@@ -69,38 +69,154 @@
     }
 
     function Dashboard({ user, onLogout }) {
+      const [activeTab, setActiveTab] = useState('inici');
+      
+      const sortidesMock = [
+        {
+          id: 1,
+          nom: 'Barça vs Real Madrid',
+          data: '15 de març, 2026',
+          preu: '45€',
+          places: '23 places disponibles de 50',
+          descripcio: 'Viatge en autocar + Entrada Camp Nou'
+        },
+        {
+          id: 2,
+          nom: 'Dinar al Mas del Joncar',
+          data: '22 de març, 2026',
+          preu: '35€',
+          places: '40 places disponibles de 40',
+          descripcio: 'Menú complet amb begudes incloses'
+        },
+        {
+          id: 3,
+          nom: 'València CF vs Atlètic Madrid',
+          data: '5 d\'abril, 2026',
+          preu: '40€',
+          places: 'Exhaurit',
+          descripcio: 'Viatge en autocar + Entrada Mestalla',
+          exhaurit: true
+        }
+      ];
+
       return (
         <div className="min-h-screen bg-gray-50">
-          <nav className="bg-red-900 text-white p-4">
-            <div className="flex justify-between items-center">
+          <nav className="bg-red-900 text-white p-4 shadow-lg">
+            <div className="container mx-auto flex justify-between items-center">
               <h1 className="text-2xl font-bold">Orgull Grana</h1>
-              <button onClick={onLogout} className="bg-red-800 px-4 py-2 rounded-lg">Tancar sessió</button>
+              <button onClick={onLogout} className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded-lg transition">
+                Tancar sessió
+              </button>
             </div>
           </nav>
-          <div className="p-6">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-3xl font-bold text-red-900 mb-6">Benvingut, {user.nom}!</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-red-50 p-6 rounded-lg">
-                  <p className="text-sm text-red-700 font-medium">Número de Soci</p>
-                  <p className="text-3xl font-bold text-red-900">{user.numSoci}</p>
+
+          <div className="container mx-auto p-6 max-w-6xl">
+            <div className="bg-white rounded-lg shadow-lg mb-6">
+              <div className="border-b border-gray-200">
+                <div className="flex">
+                  <button
+                    onClick={() => setActiveTab('inici')}
+                    className={`px-6 py-4 font-semibold ${activeTab === 'inici' ? 'text-red-900 border-b-2 border-red-900' : 'text-gray-600 hover:text-red-900'}`}
+                  >
+                    Inici
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('sortides')}
+                    className={`px-6 py-4 font-semibold ${activeTab === 'sortides' ? 'text-red-900 border-b-2 border-red-900' : 'text-gray-600 hover:text-red-900'}`}
+                  >
+                    Sortides
+                  </button>
                 </div>
-                <div className="bg-yellow-50 p-6 rounded-lg">
-                  <p className="text-sm text-yellow-800 font-medium">Temporada</p>
-                  <p className="text-2xl font-bold text-yellow-900">{user.temporada || '2025-2026'}</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <p className="text-sm text-gray-600 font-medium">DNI</p>
-                  <p className="text-lg font-semibold text-gray-800">{user.dni}</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <p className="text-sm text-gray-600 font-medium">Telèfon</p>
-                  <p className="text-lg font-semibold text-gray-800">{user.telefon}</p>
-                </div>
-                {user.email && (
-                  <div className="bg-gray-50 p-6 rounded-lg md:col-span-2">
-                    <p className="text-sm text-gray-600 font-medium">Email</p>
-                    <p className="text-lg font-semibold text-gray-800">{user.email}</p>
+              </div>
+
+              <div className="p-8">
+                {activeTab === 'inici' && (
+                  <div>
+                    <h2 className="text-3xl font-bold text-red-900 mb-6">
+                      Benvingut, {user.nom}!
+                    </h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                      <div className="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg border-l-4 border-red-900">
+                        <p className="text-sm text-red-700 font-medium mb-1">Número de Soci</p>
+                        <p className="text-3xl font-bold text-red-900">{user.numSoci}</p>
+                      </div>
+                      
+                      <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg border-l-4 border-yellow-700">
+                        <p className="text-sm text-yellow-800 font-medium mb-1">Temporada</p>
+                        <p className="text-2xl font-bold text-yellow-900">{user.temporada || '2025-2026'}</p>
+                      </div>
+                      
+                      <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400">
+                        <p className="text-sm text-gray-600 font-medium mb-1">DNI</p>
+                        <p className="text-lg font-semibold text-gray-800">{user.dni}</p>
+                      </div>
+                      
+                      <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400">
+                        <p className="text-sm text-gray-600 font-medium mb-1">Telèfon</p>
+                        <p className="text-lg font-semibold text-gray-800">{user.telefon}</p>
+                      </div>
+
+                      {user.email && (
+                        <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400 md:col-span-2">
+                          <p className="text-sm text-gray-600 font-medium mb-1">Email</p>
+                          <p className="text-lg font-semibold text-gray-800">{user.email}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="bg-gradient-to-r from-red-900 to-red-800 rounded-lg shadow-lg p-6 text-white">
+                      <h3 className="text-2xl font-bold mb-2">Visca el Barça!</h3>
+                      <p className="text-red-100">Gràcies per formar part d'Orgull Grana. Junts som més forts!</p>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'sortides' && (
+                  <div>
+                    <h2 className="text-3xl font-bold text-red-900 mb-6">Pròximes Sortides</h2>
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                      <p className="text-blue-800 text-sm">
+                        <strong>Nota:</strong> Aquesta és una visualització de prova. La funcionalitat d'inscripció estarà disponible properament.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-6">
+                      {sortidesMock.map(sortida => (
+                        <div key={sortida.id} className={`border rounded-lg p-6 ${sortida.exhaurit ? 'bg-gray-50 opacity-75' : 'bg-white hover:shadow-lg transition'}`}>
+                          <div className="flex justify-between items-start mb-4">
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900">{sortida.nom}</h3>
+                              <p className="text-gray-600 mt-1">{sortida.descripcio}</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-2xl font-bold text-red-900">{sortida.preu}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-600">📅 {sortida.data}</p>
+                              <p className={`text-sm mt-1 ${sortida.exhaurit ? 'text-red-600 font-semibold' : 'text-green-600'}`}>
+                                {sortida.places}
+                              </p>
+                            </div>
+                            
+                            <button 
+                              disabled={sortida.exhaurit}
+                              className={`px-6 py-2 rounded-lg font-semibold ${
+                                sortida.exhaurit 
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                  : 'bg-red-900 text-white hover:bg-red-800'
+                              }`}
+                            >
+                              {sortida.exhaurit ? 'Exhaurit' : 'Inscriure\'m'}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
